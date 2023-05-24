@@ -1,12 +1,10 @@
 <template>
-  <div class="container">
-    <h1 class="title">Bienvenue sur mon application</h1>
+  <div class="home">
+    <h1 class="title">Bienvenue sur About</h1>
     <div class="notification is-primary">
       C'est un exemple de notification Bulma.
     </div>
-    <button class="button is-primary">Cliquez-moi</button>
-  </div>
-  <div>
+    <div>
     <form @submit.prevent="submitPayment">
       <div>
         <label for="name">Name</label>
@@ -20,6 +18,7 @@
       <button type="submit">Submit Payment</button>
     </form>
     <div id="card-errors" role="alert"></div>
+  </div>
   </div>
 </template>
 
