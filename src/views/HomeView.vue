@@ -1,7 +1,7 @@
 <template>
     <div class="home">
-        <h1 class="title">Bienvenue sur Home</h1>
-        <div class="notification is-primary">
+        <h1 class="title">Home</h1>
+        <div class="notification is-primary text-align-center">
             C'est un exemple de notification Bulma.
         </div>
         <PaginationComponent
@@ -13,9 +13,7 @@
             <div v-for="(product, index) in products" :key="index" class="column is-one-quarter">
               <div class="card">
                 <div class="card-image">
-                  <figure class="image is-4by3">
-                    <img :src="product.picture" alt="Placeholder image">
-                  </figure>
+                    <img :src="product.picture" class="image-class" alt="Placeholder image">
                 </div>
                 <div class="card-content">
                   <div class="media">
@@ -48,6 +46,7 @@
         <PaginationComponent
           :current-page="currentPage"
           :total-pages="totalPages"
+          :service-props="service"
           @update-page="updatePage"
         ></PaginationComponent>
     </div>
@@ -58,6 +57,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      service:'products',
       itemsLimit: 20,
       products: null,
       currentPage: 1,
@@ -100,6 +100,16 @@ export default {
 .card-header-title {
   height: 300px;
 }
+.image-class {
+  max-height: 200px;
+  object-fit: cover;
+  object-position: center;
+}
+/* .image.is-4by3 {
+    padding-top: 75%;
+    object-fit: cover;
+    object-position: center;
+} */
 /* .reverse {
   flex-direction: row-reverse;
 } */

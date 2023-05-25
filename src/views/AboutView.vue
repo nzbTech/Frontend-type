@@ -1,24 +1,24 @@
 <template>
   <div class="home">
-    <h1 class="title">Bienvenue sur About</h1>
-    <div class="notification is-primary">
+    <h1 class="title">About</h1>
+    <div class="notification is-primary text-align-center">
       C'est un exemple de notification Bulma.
     </div>
     <div>
-    <form @submit.prevent="submitPayment">
-      <div>
-        <label for="name">Name</label>
-        <input id="name" type="text" v-model="cardholderName">
-      </div>
-      <div>
-        <label for="email">Email</label>
-        <input id="email" type="text" v-model="cardholderEmail">
-      </div>
-      <div id="card-element"></div>
-      <button type="submit">Submit Payment</button>
-    </form>
-    <div id="card-errors" role="alert"></div>
-  </div>
+      <form @submit.prevent="submitPayment">
+        <div>
+          <label for="name">Name</label>
+          <input id="name" type="text" v-model="cardholderName">
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" type="text" v-model="cardholderEmail">
+        </div>
+        <div id="card-element"></div>
+        <button type="submit">Submit Payment</button>
+      </form>
+      <div id="card-errors" role="alert"></div>
+    </div>
   </div>
 </template>
 

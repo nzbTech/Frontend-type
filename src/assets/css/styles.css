@@ -2,3 +2,7 @@
 .router-link-exact-active .navbar-item {
   color: red;
 } */
+
+.text-align-center {
+  text-align: center;
+}

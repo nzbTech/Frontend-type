@@ -23,12 +23,12 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary">
+                        <router-link class="button" to="/signup">
                             <strong>Sign up</strong>
-                        </a>
-                        <a class="button is-light">
-                            Log in
-                        </a>
+                        </router-link>
+                        <router-link class="button" to="/login">
+                            <strong>Login</strong>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -44,5 +44,10 @@
 
 a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-item.is-active, .navbar-link:focus, .navbar-link:focus-within, .navbar-link:hover, .navbar-link.is-active {
     background-color: inherit;
+}
+
+
+nav a.router-link-exact-active {
+    color: inherit;
 }
 </style>

@@ -18,7 +18,9 @@
 </template>
 
 <script>
+import GenericMixin from '@/mixins/GenericMixin.js'
 export default {
+  mixins: [GenericMixin],
   props: {
     currentPage: {
       type: Number,
@@ -27,7 +29,19 @@ export default {
     totalPages: {
       type: Number,
       required: true
+    },
+    serviceProps: {
+      type: String,
+      required: false
     }
+  },
+  data () {
+    return {
+      test: ''
+    }
+  },
+  created() {
+    this.test = this.greet(); // Appel de la méthode greet() du mixin
   },
   computed: {
     displayedPages() {
@@ -38,13 +52,10 @@ export default {
         }
       } else {
         if (this.currentPage <= 2) {
-          console.log('je passe par là 1')
           pages.push(1, 2, 3, '...', this.totalPages);
         } else if (this.currentPage >= this.totalPages - 1) {
-          console.log('je passe par là 2')
           pages.push(1, '...', this.totalPages - 2, this.totalPages - 1, this.totalPages);
         } else {
-          console.log('je passe par là 3')
           pages.push(1, '...', this.currentPage - 1, this.currentPage, this.currentPage + 1, '...', this.totalPages);
         }
       }

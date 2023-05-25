@@ -6,8 +6,10 @@ import store from './store'
 import './assets/css/styles.css'
 import './assets/js/bulma.js'
 import 'bulma/css/bulma.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 import NavBar from '@/components/NavBar.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
+import GenericMixin from '@/mixins/GenericMixin.js'
 
 // Définissez la configuration de base d'Axios
 axios.defaults.baseURL = 'http://localhost:3000/api/'; // Remplacez par votre URL de base
@@ -27,5 +29,6 @@ const app = createApp(App)
 
 app.component('NavBar', NavBar)
 app.component('PaginationComponent', PaginationComponent)
+app.mixin(GenericMixin)
 
 app.use(store).use(router).mount('#app')
