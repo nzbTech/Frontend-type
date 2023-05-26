@@ -11,31 +11,43 @@
                     <div class="column is-4-tablet is-4-desktop is-3-widescreen">
                     <form action="" class="box">
                         <div class="field">
-                        <label for="" class="label">Email</label>
+                        <label class="label">Email</label>
                         <div class="control has-icons-left">
-                            <input type="email" placeholder="guillaume@gmail.com" class="input" required>
+                            <input 
+                                type="email" 
+                                placeholder="guillaume@gmail.com" 
+                                class="input" 
+                                required
+                                v-model="email">
                             <span class="icon is-small is-left">
                             <i class="fa fa-envelope"></i>
                             </span>
                         </div>
                         </div>
                         <div class="field">
-                        <label for="" class="label">Password</label>
+                        <label class="label">Password</label>
                         <div class="control has-icons-left">
-                            <input type="password" placeholder="*******" class="input" required>
+                            <input 
+                                type="password" 
+                                placeholder="*******" 
+                                class="input" 
+                                required
+                                v-model="password">
                             <span class="icon is-small is-left">
                             <i class="fa fa-lock"></i>
                             </span>
                         </div>
                         </div>
                         <div class="field">
-                        <label for="" class="checkbox">
+                        <label class="checkbox">
                             <input type="checkbox">
                         Remember me
                         </label>
                         </div>
                         <div class="field">
-                        <button class="button">
+                        <button 
+                            class="button"
+                            @click="login">
                             Login
                         </button>
                         </div>
@@ -49,23 +61,35 @@
 </template>
   
 <script>
-export default {
-data() {
-    return {
-    username: '',
-    password: ''
-    };
-},
-methods: {
-    login() {
-    // Logique de connexion ici
-    // Vous pouvez envoyer les données d'identification au serveur ou gérer la connexion localement
-    console.log('Connexion avec nom d\'utilisateur:', this.username);
+    import { mapActions } from 'vuex'
+    export default {
+    data() {
+        return {
+            email: null,
+            password: null
+        }
+    },
+    methods: {
+        ...mapActions(['updateUser']),
+        async login() {
+            try {
+                const params = {
+                    email: this.email,
+                    password:  this.password
+                }
+                const result = await this.$http.post('/user/login', params)
+                const { token, userId } = result.data
+                localStorage.setItem('token', token)
+                this.updateUser({ userId })
+            } catch (error) {
+                console.error(error)
+            }
+        }
     }
 }
-};
 </script>
   
+
 <style scoped>
 .login-page {
 height: 100vh;
@@ -74,11 +98,9 @@ align-items: center;
 justify-content: center;
 background-color: #f5f5f5;
 }
-
 .box {
 padding: 2rem;
 }
-
 .button {
 background-color: #00d1b2;
 border-color: #00d1b2;

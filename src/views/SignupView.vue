@@ -11,26 +11,37 @@
                     <div class="box">
                     <form @submit.prevent="signup">
                         <div class="field">
-                        <label class="label">Nom d'utilisateur</label>
+                        <label class="label">Prénom</label>
                         <div class="control">
-                            <input class="input" type="text" v-model="username" placeholder="Guillaume" required>
+                            <input class="input" type="text" v-model="firstname" placeholder="Guillaume">
                         </div>
                         </div>
-                        <div class="field is-left">
+                        <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control">
+                            <input class="input" type="text" v-model="lastname" placeholder="Leger">
+                        </div>
+                        </div>
+                        <div class="field">
                         <label class="label is-left">Adresse e-mail</label>
                         <div class="control">
-                            <input class="input" type="email" v-model="email" placeholder="guillaume@gmail.com" required>
+                            <input class="input" type="email" v-model="email" placeholder="guillaume@gmail.com">
                         </div>
                         </div>
                         <div class="field">
-                        <label class="label is-left">Mot de passe</label>
+                        <label class="label">Mot de passe</label>
                         <div class="control">
-                            <input class="input" type="password" v-model="password" placeholder="*******" required>
+                            <input class="input" type="password" v-model="password" placeholder="*******">
                         </div>
                         </div>
                         <div class="field">
+                        <div v-if="errorMessage" class="error-message">
+                            {{ errorMessage }}
+                        </div>
                         <div class="control">
-                            <button class="button is-primary is-fullwidth">Créer un compte</button>
+                            <button 
+                                class="button is-primary is-fullwidth"
+                                @click="signup">Créer un compte</button>
                         </div>
                         </div>
                     </form>
@@ -44,26 +55,50 @@
   
 <script>
 export default {
-data() {
-    return {
-    username: '',
-    email: '',
-    password: ''
-    };
-},
-methods: {
-    signup() {
-    // Logique de création de compte ici
-    // Vous pouvez envoyer les données du formulaire au serveur ou gérer la création de compte localement
-    console.log('Création de compte avec nom d\'utilisateur:', this.username);
+    data() {
+        return {
+            firstname: '',
+            lastname: '',
+            email: '',
+            password: '',
+            errorMessage: null
+        }
+    },
+    methods: {
+        async signup() {
+            try {
+                if (!this.firstname || !this.name || !this.email || !this.password) {
+                    this.errorMessage = "Veuillez remplir tous les champs."
+                return
+                }
+                const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+                    if (!emailRegex.test(this.email)) {
+                this.errorMessage = "Veuillez entrer une adresse email valide."
+                return
+                }
+                const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+                    if (!passwordRegex.test(this.password)) {
+                this.errorMessage = "Le mot de passe doit contenir au moins 8 caractères, dont au moins une lettre et un chiffre."
+                return
+                }
+                const params = {
+                    firstname: this.firstname,
+                    name:  this.name,
+                    email: this.email,
+                    password:  this.password
+                }
+                const result = await this.$http.post('/user/signup', params)
+                console.log('result =>', result)
+            } catch (error) {
+                console.error(error)
+            }
+        }
     }
 }
-};
 </script>
   
 <style scoped>
 .signup-page {
-height: 100vh;
 display: flex;
 justify-content: center;
 padding: 3rem 3rem;

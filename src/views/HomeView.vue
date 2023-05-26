@@ -4,88 +4,92 @@
         <div class="notification is-primary text-align-center">
             C'est un exemple de notification Bulma.
         </div>
-        <PaginationComponent
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          @update-page="updatePage"
-        ></PaginationComponent>
-        <div class="columns is-multiline">
-            <div v-for="(product, index) in products" :key="index" class="column is-one-quarter">
-              <div class="card">
-                <div class="card-image">
-                    <img :src="product.picture" class="image-class" alt="Placeholder image">
-                </div>
-                <div class="card-content">
-                  <div class="media">
-                    <div class="media-left">
-                      <!-- <figure class="image is-48x48">
-                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                      </figure> -->
-                    </div>
-                    <div class="media-content">
-                      <p class="title is-4">{{ product.name }}</p>
-                      <p class="subtitle is-6">{{ product.price }} €</p>
-                    </div>
+        <div v-if="loading" class="loading-indicator text-align-center">
+          <i class="fas fa-spinner fa-spin"></i> Chargement en cours...
+        </div>
+        <div v-else>
+          <div class="columns is-multiline">
+              <div v-for="(product, index) in products" :key="index" class="column is-one-quarter is-4-tablet is-4-desktop is-3-widescreen">
+                <div class="card text-align-center">
+                  <div class="card-image">
+                      <img :src="product.picture" class="image-class" alt="Placeholder image">
                   </div>
+                  <div class="card-content">
+                    <div class="media">
+                      <div class="media-left">
+                      </div>
+                      <div class="media-content">
+                        <p class="title is-4">{{ product.name }}</p>
+                        <p class="subtitle is-6">{{ product.price }} €</p>
+                      </div>
+                    </div>
 
-                  <div class="content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus nec iaculis mauris.
-                    <br>
-                    <time datetime="2016-1-1">en stock</time>
-                  </div>
-                  <div class="columns reverse">
-                    <div class="column">
-                      <button class="button is-success">Ajouter au panier</button>
+                    <div class="content">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Phasellus nec iaculis mauris.
+                      <br>
+                      <time datetime="2016-1-1">en stock</time>
+                    </div>
+                    <div class="columns reverse">
+                      <div class="column">
+                        <button class="button is-primary"><i class="fas fa-shopping-basket"></i></button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-        </div>
-        <PaginationComponent
+          </div>
+          <PaginationComponent
           :current-page="currentPage"
-          :total-pages="totalPages"
+          :total-pages="totalPages || 0"
           :service-props="service"
           @update-page="updatePage"
-        ></PaginationComponent>
+          ></PaginationComponent>
+        </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
+      loading: true,
       service:'products',
       itemsLimit: 20,
       products: null,
       currentPage: 1,
       totalPages: 10
-    };
+    }
+  },
+  computed: {
+    ...mapGetters(['getUser'])
   },
   mounted() {
-    this.updatePage()
+    const user = this.getUser
+    console.log('user =>', user)
+    this.getProducts()
   },
   methods: {
-    async updatePage(page) {
+    async getProducts(page) {
       this.currentPage = page
       try {
-          const result = await axios.get('/products', {
-            params: {
+          const params = {
               page: this.currentPage,
               limit: this.itemsLimit,
             }
-          })
+          const result = await this.$http.get('/products', params)
           const { products, totalItems, totalPages } = result.data
           this.products = products
           this.totalItems = totalItems
           this.totalPages = totalPages
-
+          this.loading = false
       } catch (error) {
           console.error(error)
-
       }
+    },
+    updatePage(page) {
+      this.getProducts(page)
     }
   }
 }
@@ -104,6 +108,12 @@ export default {
   max-height: 200px;
   object-fit: cover;
   object-position: center;
+}
+.button.is-success {
+  width: 20%;
+}
+.card {
+  height: 500px;
 }
 /* .image.is-4by3 {
     padding-top: 75%;
