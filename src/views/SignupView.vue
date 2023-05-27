@@ -57,10 +57,10 @@
 export default {
     data() {
         return {
-            firstname: '',
-            lastname: '',
-            email: '',
-            password: '',
+            firstname: null,
+            lastname: null,
+            email: null,
+            password: null,
             errorMessage: null
         }
     },

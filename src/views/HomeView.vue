@@ -41,7 +41,7 @@
           </div>
           <PaginationComponent
           :current-page="currentPage"
-          :total-pages="totalPages || 0"
+          :total-pages="totalPages"
           :service-props="service"
           @update-page="updatePage"
           ></PaginationComponent>
@@ -72,13 +72,18 @@ export default {
   },
   methods: {
     async getProducts(page) {
-      this.currentPage = page
+      if (page) {
+        this.currentPage = page
+      } else {
+        this.currentPage = 1
+      }
       try {
-          const params = {
+          const result = await this.$http.get('/products', {
+            params: {
               page: this.currentPage,
               limit: this.itemsLimit,
             }
-          const result = await this.$http.get('/products', params)
+          })
           const { products, totalItems, totalPages } = result.data
           this.products = products
           this.totalItems = totalItems

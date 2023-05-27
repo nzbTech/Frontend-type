@@ -44,6 +44,9 @@
                         Remember me
                         </label>
                         </div>
+                        <div v-if="errorMessage" class="error-message">
+                            {{ errorMessage }}
+                        </div>
                         <div class="field">
                         <button 
                             class="button"
@@ -66,7 +69,8 @@
     data() {
         return {
             email: null,
-            password: null
+            password: null,
+            errorMessage: null
         }
     },
     methods: {
@@ -81,8 +85,9 @@
                 const { token, userId } = result.data
                 localStorage.setItem('token', token)
                 this.updateUser({ userId })
-            } catch (error) {
-                console.error(error)
+                this.$router.push('/')
+            } catch (e) {
+                this.errorMessage = e.response.data.error
             }
         }
     }

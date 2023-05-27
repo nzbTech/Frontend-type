@@ -6,7 +6,6 @@ const myMixin = {
     },
     methods: {
       greet() {
-        console.log(this.message);
       }
     }
 }

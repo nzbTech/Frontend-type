@@ -23,18 +23,49 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <router-link class="button" to="/signup">
-                            <strong>Sign up</strong>
-                        </router-link>
-                        <router-link class="button" to="/login">
-                            <strong>Login</strong>
-                        </router-link>
+                        <div v-if="!getUser">
+                            <router-link class="button" to="/signup">
+                                <strong>Sign up</strong>
+                            </router-link>
+                            <router-link class="button" to="/login">
+                                <strong>Login</strong>
+                            </router-link>
+                        </div>
+                        <div v-else>
+                            <router-link class="button" to="/profil">
+                                <strong>Profil</strong>
+                            </router-link>
+                            <div class="button" @click="logout">
+                                <strong>Logout</strong>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+export default {
+  data() {
+    return {
+    }
+  },
+  computed: {
+    ...mapGetters(['getUser'])
+  },
+  mounted() {
+  },
+  methods: {
+    async logout() {
+        localStorage.removeItem('token')
+        this.$store.dispatch('updateUser', null);
+    },
+  }
+}
+</script>
 
 <style>
 /* .router-link-active,

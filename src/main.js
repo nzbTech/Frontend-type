@@ -1,5 +1,4 @@
 import process from 'process'
-window.process = process
 import { createApp } from 'vue'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
@@ -14,8 +13,8 @@ import NavBar from '@/components/NavBar.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
 import GenericMixin from '@/mixins/GenericMixin.js'
 
-
-axios.defaults.baseURL = 'http://localhost:3000/api/'; // Remplacez par votre URL de base
+window.process = process
+axios.defaults.baseURL = 'http://localhost:3000/api/'
 axios.interceptors.request.use(config => {
     const token = localStorage.getItem('token')
     if (token) {
