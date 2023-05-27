@@ -16,7 +16,7 @@
           <div class="navbar-start">
             <router-link to="/commands" class="navbar-item">Mes commandes</router-link>
             <router-link to="/cart" class="navbar-item">Mon panier</router-link>
-            <router-link to="/profile" class="navbar-item">Mon profil</router-link>
+            <router-link to="/profil" class="navbar-item">Mon profil</router-link>
           </div>
         </div>
       </nav>

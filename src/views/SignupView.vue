@@ -67,7 +67,7 @@ export default {
     methods: {
         async signup() {
             try {
-                if (!this.firstname || !this.name || !this.email || !this.password) {
+                if (!this.firstname || !this.lastname || !this.email || !this.password) {
                     this.errorMessage = "Veuillez remplir tous les champs."
                 return
                 }
@@ -76,8 +76,8 @@ export default {
                 this.errorMessage = "Veuillez entrer une adresse email valide."
                 return
                 }
-                const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
-                    if (!passwordRegex.test(this.password)) {
+                const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!.@#$%^&*])(?=.{8,})/
+                    if (!PASSWORD_REGEX.test(this.password)) {
                 this.errorMessage = "Le mot de passe doit contenir au moins 8 caractères, dont au moins une lettre et un chiffre."
                 return
                 }
@@ -87,8 +87,8 @@ export default {
                     email: this.email,
                     password:  this.password
                 }
-                const result = await this.$http.post('/user/signup', params)
-                console.log('result =>', result)
+                await this.$http.post('/user/signup', params)
+                this.$router.push('/login')
             } catch (error) {
                 console.error(error)
             }

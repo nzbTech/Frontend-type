@@ -14,10 +14,10 @@
         <div class="navbar-menu" id="navMenu">
             <div class="navbar-start">
                 <a class="navbar-item">
-                    <router-link to="/">Home</router-link>
+                    <router-link to="/">Accueil</router-link>
                 </a>
                 <a class="navbar-item">
-                    <router-link to="/about">About</router-link>
+                    <router-link to="/about">Test</router-link>
                 </a>
             </div>
             <div class="navbar-end">
@@ -36,7 +36,10 @@
                                 <strong>Profil</strong>
                             </router-link>
                             <div class="button" @click="logout">
-                                <strong>Logout</strong>
+                                <strong>Déconnexion</strong>
+                            </div>
+                            <div class="button" to="/profil">
+                                <strong><i class="fas fa-shopping-basket"></i></strong>
                             </div>
                         </div>
                     </div>
