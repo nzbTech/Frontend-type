@@ -41,7 +41,6 @@ export default {
     }
   },
   created() {
-    this.test = this.greet(); // Appel de la méthode greet() du mixin
   },
   computed: {
     displayedPages() {

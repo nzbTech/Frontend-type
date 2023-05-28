@@ -30,6 +30,10 @@
                             <router-link class="button" to="/login">
                                 <strong>Login</strong>
                             </router-link>
+                            <div class="button" to="/profil">
+                                <strong><i class="fas fa-shopping-basket"></i></strong>
+                                <span class="cart-badge">{{ cartItemsCount }}</span>
+                            </div>
                         </div>
                         <div v-else>
                             <router-link class="button" to="/profil">
@@ -40,6 +44,7 @@
                             </div>
                             <div class="button" to="/profil">
                                 <strong><i class="fas fa-shopping-basket"></i></strong>
+                                <span class="cart-badge">{{ cartItemsCount }}</span>
                             </div>
                         </div>
                     </div>
@@ -57,7 +62,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getUser', 'cartItemsCount'])
   },
   mounted() {
   },
@@ -71,10 +76,6 @@ export default {
 </script>
 
 <style>
-/* .router-link-active,
-.router-link-exact-active {
-    color: inherit !important;
-} */
 
 a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover, a.navbar-item.is-active, .navbar-link:focus, .navbar-link:focus-within, .navbar-link:hover, .navbar-link.is-active {
     background-color: inherit;

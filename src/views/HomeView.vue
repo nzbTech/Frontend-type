@@ -32,7 +32,9 @@
                     </div>
                     <div class="columns reverse">
                       <div class="column">
-                        <button class="button is-primary"><i class="fas fa-shopping-basket"></i></button>
+                        <button 
+                          class="button is-primary"
+                          @click="addToCart(product)"><i class="fas fa-shopping-basket"></i></button>
                       </div>
                     </div>
                   </div>
@@ -67,10 +69,15 @@ export default {
   },
   mounted() {
     const user = this.getUser
-    console.log('user =>', user)
+    if (user) {
+      console.log('user =>', user)
+    }
     this.getProducts()
   },
   methods: {
+    addToCart(item) {
+      this.$store.commit('addToCart', item)
+    },
     async getProducts(page) {
       if (page) {
         this.currentPage = page

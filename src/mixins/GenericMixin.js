@@ -1,13 +1,11 @@
 const myMixin = {
-    data() {
-      return {
-        message: 'Hello from mixin!'
-      }
-    },
-    methods: {
-      greet() {
-      }
+  data() {
+    return {
+      cart: [] 
     }
+  },
+  methods: {
+  }
 }
   
 export default myMixin

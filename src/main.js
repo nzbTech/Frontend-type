@@ -26,10 +26,18 @@ axios.interceptors.request.use(config => {
 })
 
 const app = createApp(App)
+
+
 const token = localStorage.getItem('token')
 if (token) {
   const decodedToken = jwt.decode(token)
   store.dispatch('updateUser', decodedToken.userId)
+}
+
+const cartData = localStorage.getItem('cart')
+console.log('Main cartData =>', cartData)
+if (cartData) {
+  store.state.cart = JSON.parse(cartData)
 }
 
 app.config.globalProperties.$http = axios
