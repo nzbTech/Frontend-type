@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import CryptoJS from 'crypto-js'
 
 const store = createStore({
   state() {
@@ -24,7 +25,21 @@ const store = createStore({
       } else {
         state.cart.push(itemData)
       }
-      localStorage.setItem('cart', JSON.stringify(state.cart))
+      const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
+      const cartData = JSON.stringify(state.cart)
+      const panierCrypte = CryptoJS.AES.encrypt(cartData, cleCryptage).toString()
+      localStorage.setItem('cart', panierCrypte)
+      // console.log('panier decrypted =>', cartData)
+      // console.log('panier crypted =>', panierCrypte)
+    },
+    updateItemCart(state, item) {
+      state.cart = item
+      const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
+      const cartData = JSON.stringify(state.cart)
+      const panierCrypte = CryptoJS.AES.encrypt(cartData, cleCryptage).toString()
+      localStorage.setItem('cart', panierCrypte)
+      console.log('panier decrypted =>', cartData)
+      console.log('panier crypted =>', panierCrypte)
     }
   },
   actions: {
@@ -38,6 +53,9 @@ const store = createStore({
     },
     cartItemsCount(state) {
       return state.cart.length
+    },
+    getCart(state) {
+      return state.cart
     }
   }
 })

@@ -2,6 +2,7 @@ import process from 'process'
 import { createApp } from 'vue'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
+import CryptoJS from 'crypto-js'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -27,7 +28,6 @@ axios.interceptors.request.use(config => {
 
 const app = createApp(App)
 
-
 const token = localStorage.getItem('token')
 if (token) {
   const decodedToken = jwt.decode(token)
@@ -35,9 +35,13 @@ if (token) {
 }
 
 const cartData = localStorage.getItem('cart')
-console.log('Main cartData =>', cartData)
 if (cartData) {
-  store.state.cart = JSON.parse(cartData)
+  const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
+  const decryptedBytes = CryptoJS.AES.decrypt(cartData, cleCryptage)
+  const panierDecrypte = decryptedBytes.toString(CryptoJS.enc.Utf8)
+  store.state.cart = JSON.parse(panierDecrypte)
+  // console.log('panier crypted =>', cartData)
+  console.log('panier decrypted =>', panierDecrypte)
 }
 
 app.config.globalProperties.$http = axios

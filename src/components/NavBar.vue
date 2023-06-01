@@ -30,10 +30,10 @@
                             <router-link class="button" to="/login">
                                 <strong>Login</strong>
                             </router-link>
-                            <div class="button" to="/profil">
+                            <router-link class="button" to="/panier">
                                 <strong><i class="fas fa-shopping-basket"></i></strong>
                                 <span class="cart-badge">{{ cartItemsCount }}</span>
-                            </div>
+                            </router-link>
                         </div>
                         <div v-else>
                             <router-link class="button" to="/profil">
@@ -42,10 +42,10 @@
                             <div class="button" @click="logout">
                                 <strong>Déconnexion</strong>
                             </div>
-                            <div class="button" to="/profil">
+                            <router-link class="button" to="/panier">
                                 <strong><i class="fas fa-shopping-basket"></i></strong>
                                 <span class="cart-badge">{{ cartItemsCount }}</span>
-                            </div>
+                            </router-link>
                         </div>
                     </div>
                 </div>
