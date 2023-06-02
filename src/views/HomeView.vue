@@ -10,6 +10,7 @@
         <div v-else>
           <div class="columns">
             <div class="column is-3">
+              <h2 class="subtitlee">Filtres</h2>
               <FilterCollapse
                   :initialFilters="filters"
                   @filters-changed="getProducts(currentPage)"
@@ -155,6 +156,12 @@ export default {
 }
 .no-wrap {
   white-space: nowrap;
+}
+.subtitlee {
+  text-align: center;
+  font-weight: 600;
+  line-height: 1.125;
+  font-size: 1.5rem;
 }
 /* .image.is-4by3 {
     padding-top: 75%;
