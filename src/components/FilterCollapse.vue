@@ -25,11 +25,21 @@
         <div class="flex">
             <div class="control">
                 <label class="label">Min</label>
-                <input class="input" type="number" v-model="filters.minPrice" min="0">
+                <input
+                    v-model="filters.minPrice" 
+                    class="input" 
+                    type="number" 
+                    placeholder="€"  
+                    min="0">
             </div>
             <div class="control">
                 <label class="label">Max</label>
-                <input class="input" type="number" v-model="filters.maxPrice" min="0">
+                <input
+                v-model="filters.maxPrice" 
+                    class="input" 
+                    type="number" 
+                    placeholder="€"  
+                    min="0">
             </div>
         </div>
     </div>

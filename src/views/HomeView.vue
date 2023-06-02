@@ -73,7 +73,8 @@ export default {
       currentPage: 1,
       totalPages: 10,
       filters: {
-        category: ''
+        category: '',
+        sortByPrice: ''
       }
     }
   },
