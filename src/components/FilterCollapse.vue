@@ -12,13 +12,23 @@
                 </select>
             </div>
         </div>
+        <label class="label">Prix </label>
+        <div class="control">
+            <div class="select">
+                <select v-model="filters.sortByPrice" @change="updateFilters">
+                    <option value="">Aucun</option>
+                    <option value="asc">Croissant</option>
+                    <option value="desc">Décroissant</option>
+                </select>
+            </div>
+        </div>
         <div class="flex">
             <div class="control">
-                <label class="label">Prix Min</label>
+                <label class="label">Min</label>
                 <input class="input" type="number" v-model="filters.minPrice" min="0">
             </div>
             <div class="control">
-                <label class="label">Prix Max</label>
+                <label class="label">Max</label>
                 <input class="input" type="number" v-model="filters.maxPrice" min="0">
             </div>
         </div>
