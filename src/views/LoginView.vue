@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <h1 class="title">Login</h1>
+        <h1 class="title">Connexion</h1>
         <div class="notification is-primary text-align-center">
             C'est un exemple de notification Bulma.
         </div>
@@ -25,7 +25,7 @@
                         </div>
                         </div>
                         <div class="field">
-                        <label class="label">Password</label>
+                        <label class="label">Mot de passe</label>
                         <div class="control has-icons-left">
                             <input 
                                 type="password" 
@@ -41,7 +41,7 @@
                         <div class="field">
                         <label class="checkbox">
                             <input type="checkbox">
-                        Remember me
+                        Se souvenir de moi
                         </label>
                         </div>
                         <div v-if="errorMessage" class="error-message">
@@ -51,7 +51,7 @@
                         <button 
                             class="button"
                             @click="login">
-                            Login
+                            Se connecter
                         </button>
                         </div>
                     </form>

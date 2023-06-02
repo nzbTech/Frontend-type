@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <h1 class="title">Home</h1>
+        <h1 class="title">Produits</h1>
         <div class="notification is-primary text-align-center">
             C'est un exemple de notification Bulma.
         </div>
@@ -8,7 +8,15 @@
           <i class="fas fa-spinner fa-spin"></i> Chargement en cours...
         </div>
         <div v-else>
-          <div class="columns is-multiline">
+          <div class="columns">
+            <div class="column is-3">
+              <FilterCollapse
+                  :initialFilters="filters"
+                  @filters-changed="getProducts(currentPage)"
+              />
+            </div>
+            <div class="column">
+              <div class="columns is-multiline">
               <div v-for="(product, index) in products" :key="index" class="column is-one-quarter is-4-tablet is-4-desktop is-3-widescreen">
                 <div class="card text-align-center">
                   <div class="card-image">
@@ -19,16 +27,15 @@
                       <div class="media-left">
                       </div>
                       <div class="media-content">
-                        <p class="title is-4">{{ product.name }}</p>
+                        <p class="is-1 no-wrap">{{ product.name }}</p>
                         <p class="subtitle is-6">{{ product.price }} €</p>
                       </div>
                     </div>
-
                     <div class="content">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                       Phasellus nec iaculis mauris.
                       <br>
-                      <time datetime="2016-1-1">en stock</time>
+                      <!-- <time datetime="2016-1-1">en stock</time> -->
                     </div>
                     <div class="columns reverse">
                       <div class="column">
@@ -40,6 +47,8 @@
                   </div>
                 </div>
               </div>
+              </div>
+            </div>
           </div>
           <PaginationComponent
           :current-page="currentPage"
@@ -58,10 +67,13 @@ export default {
     return {
       loading: true,
       service:'products',
-      itemsLimit: 20,
+      itemsLimit: 10,
       products: null,
       currentPage: 1,
-      totalPages: 10
+      totalPages: 10,
+      filters: {
+        category: ''
+      }
     }
   },
   computed: {
@@ -85,19 +97,30 @@ export default {
         this.currentPage = 1
       }
       try {
-          const result = await this.$http.get('/products', {
-            params: {
-              page: this.currentPage,
-              limit: this.itemsLimit,
+        const params = {
+          page: this.currentPage,
+          limit: this.itemsLimit
+        }
+
+        for (const filterKey in this.filters) {
+          if (Object.prototype.hasOwnProperty.call(this.filters, filterKey)) {
+            const filterValue = this.filters[filterKey]
+            console.log('filterValue =>', filterValue)
+            if (filterValue !== null  && filterValue !== '') {
+              params[filterKey] = filterValue
+            } else {
+              delete params[filterKey]
             }
-          })
-          const { products, totalItems, totalPages } = result.data
-          this.products = products
-          this.totalItems = totalItems
-          this.totalPages = totalPages
-          this.loading = false
+          }
+        }
+        const result = await this.$http.get('/products', {params: params})
+        const { products, totalItems, totalPages } = result.data
+        this.products = products
+        this.totalItems = totalItems
+        this.totalPages = totalPages
+        this.loading = false
       } catch (error) {
-          console.error(error)
+        console.error(error)
       }
     },
     updatePage(page) {
@@ -126,6 +149,12 @@ export default {
 }
 .card {
   height: 500px;
+}
+.card-image {
+  height: 40%;
+}
+.no-wrap {
+  white-space: nowrap;
 }
 /* .image.is-4by3 {
     padding-top: 75%;

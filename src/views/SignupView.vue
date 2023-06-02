@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <h1 class="title">Signup</h1>
+        <h1 class="title">Inscription</h1>
         <div class="notification is-primary text-align-center">
             C'est un exemple de notification Bulma.
         </div>

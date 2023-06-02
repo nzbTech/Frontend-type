@@ -11,6 +11,7 @@ import './assets/js/bulma.js'
 import 'bulma/css/bulma.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import NavBar from '@/components/NavBar.vue'
+import FilterCollapse from '@/components/FilterCollapse.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
 import GenericMixin from '@/mixins/GenericMixin.js'
 
@@ -47,6 +48,7 @@ if (cartData) {
 app.config.globalProperties.$http = axios
 app.component('NavBar', NavBar)
 app.component('PaginationComponent', PaginationComponent)
+app.component('FilterCollapse', FilterCollapse)
 app.mixin(GenericMixin)
 
 app.use(store).use(router).mount('#app')
