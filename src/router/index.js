@@ -31,6 +31,11 @@ const routes = [
     path: '/panier',
     name: 'panier',
     component: () => import('../views/CartView.vue')
+  },
+  {
+    path: '/reset-password/:id',
+    name: 'reset-password',
+    component: () => import('../views/ResetPasswordView.vue')
   }
 ]
 
