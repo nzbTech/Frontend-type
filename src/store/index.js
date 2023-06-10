@@ -5,7 +5,10 @@ const store = createStore({
   state() {
     return {
       user: null,
-      cart: []
+      cart: {
+        items: [],
+        promo: null
+      }
     }
   },
   mutations: {
@@ -19,27 +22,23 @@ const store = createStore({
         price: item.price,
         quantity: 1,
       }
-      const existingProduct = state.cart.find(product => product.id === itemData.id)
+      const existingProduct = state.cart.items.find(product => product.id === itemData.id)
       if (existingProduct) {
         existingProduct.quantity += 1
       } else {
-        state.cart.push(itemData)
+        state.cart.items.push(itemData)
       }
       const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
       const cartData = JSON.stringify(state.cart)
       const panierCrypte = CryptoJS.AES.encrypt(cartData, cleCryptage).toString()
       localStorage.setItem('cart', panierCrypte)
-      // console.log('panier decrypted =>', cartData)
-      // console.log('panier crypted =>', panierCrypte)
     },
-    updateItemCart(state, item) {
-      state.cart = item
+    updateItemCart(state, cart) {
+      state.cart.items = cart
       const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
       const cartData = JSON.stringify(state.cart)
       const panierCrypte = CryptoJS.AES.encrypt(cartData, cleCryptage).toString()
       localStorage.setItem('cart', panierCrypte)
-      console.log('panier decrypted =>', cartData)
-      console.log('panier crypted =>', panierCrypte)
     }
   },
   actions: {
@@ -52,7 +51,11 @@ const store = createStore({
       return state.user
     },
     cartItemsCount(state) {
-      return state.cart.length
+      if (state.cart && state.cart.items) {
+        return state.cart.items.length
+      } else {
+        return null
+      }
     },
     getCart(state) {
       return state.cart

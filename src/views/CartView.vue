@@ -6,7 +6,7 @@
         </div>
         <section class="section">
         <div
-            v-if="getCart.length > 0"
+            v-if="getCart.items.length > 0"
             class="container">
         <table class="table is-striped is-fullwidth">
             <thead>
@@ -19,7 +19,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(item, index) in getCart" :key="index">
+            <tr v-for="(item, index) in getCart.items" :key="index">
                 <td>{{ item.name }}</td>
                 <td>{{ item.price }}</td>
                 <td>
@@ -55,14 +55,14 @@ export default {
   computed: {
     ...mapGetters(['getCart']),
     total() {
-      return this.getCart.reduce((total, item) => total + item.price * item.quantity, 0)
+      return this.getCart.items.reduce((total, item) => total + item.price * item.quantity, 0)
     }
   },
   mounted() {
   },
   methods: {
     incrementQuantity(item) {
-      let cart = this.getCart
+      let cart = this.getCart.items
       let cartItem = cart.find(i => i.id === item.id)
       if (cartItem) {
         cartItem.quantity++
@@ -70,7 +70,7 @@ export default {
       }
     },
     decrementQuantity(item) {
-      let cart = this.getCart
+      let cart = this.getCart.items
       let cartItem = cart.find(i => i.id === item.id)
       if (cartItem && cartItem.quantity > 1) {
         cartItem.quantity--
@@ -82,7 +82,7 @@ export default {
       }
     },
     removeFromCart(item) {
-      let cart = this.getCart
+      let cart = this.getCart.items
       let newCart = cart.filter(i => i.id !== item.id)
       this.$store.commit('updateItemCart', newCart)
     }
