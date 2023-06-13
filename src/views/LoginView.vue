@@ -70,6 +70,7 @@
   
 <script>
     import { mapActions } from 'vuex'
+    import jwt from 'jsonwebtoken'
     export default {
     data() {
         return {
@@ -93,9 +94,10 @@
                     password:  this.password
                 }
                 const result = await this.$http.post('/user/login', params)
-                const { token, userId } = result.data
+                const { token } = result.data
                 localStorage.setItem('token', token)
-                this.updateUser({ userId })
+                const decodedToken = jwt.decode(token)
+                this.updateUser(decodedToken)
                 this.$router.push('/')
             } catch (e) {
                 this.errorMessage = e.response.data.error
