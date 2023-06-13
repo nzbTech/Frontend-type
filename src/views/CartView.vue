@@ -61,6 +61,9 @@ export default {
   mounted() {
   },
   methods: {
+    checkout() {
+      this.$router.push('/pre-order')
+    },
     incrementQuantity(item) {
       let cart = this.getCart.items
       let cartItem = cart.find(i => i.id === item.id)

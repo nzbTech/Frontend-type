@@ -32,7 +32,7 @@ const app = createApp(App)
 const token = localStorage.getItem('token')
 if (token) {
   const decodedToken = jwt.decode(token)
-  store.dispatch('updateUser', decodedToken.userId)
+  store.dispatch('updateUser', decodedToken)
 }
 
 const cartData = localStorage.getItem('cart')
