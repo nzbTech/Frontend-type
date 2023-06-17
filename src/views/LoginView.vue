@@ -17,7 +17,7 @@
                                 type="email" 
                                 placeholder="guillaume@gmail.com" 
                                 class="input" 
-                                v-model="email">
+                                v-model="customer.email">
                             <span class="icon is-small is-left">
                             <i class="fa fa-envelope"></i>
                             </span>
@@ -30,7 +30,7 @@
                                 type="password" 
                                 placeholder="*******" 
                                 class="input" 
-                                v-model="password">
+                                v-model="customer.password">
                             <span class="icon is-small is-left">
                             <i class="fa fa-lock"></i>
                             </span>
@@ -55,7 +55,7 @@
                         <div class="field">
                         <button 
                             class="button"
-                            @click="login">
+                            @click="login(origin)">
                             Se connecter
                         </button>
                         </div>
@@ -69,55 +69,14 @@
 </template>
   
 <script>
-    import { mapActions } from 'vuex'
-    import jwt from 'jsonwebtoken'
     export default {
     data() {
         return {
+            origin:'LoginView',
             email: null,
-            password: null,
-            errorMessage: null,
-            successMessage: null,
-            newPassword: null
         }
     },
     methods: {
-        ...mapActions(['updateUser']),
-        async login() {
-            if (!this.email || !this.password) {
-                this.errorMessage = "Veuillez remplir tous les champs."
-                return
-            }
-            try {
-                const params = {
-                    email: this.email,
-                    password:  this.password
-                }
-                const result = await this.$http.post('/user/login', params)
-                const { token } = result.data
-                localStorage.setItem('token', token)
-                const decodedToken = jwt.decode(token)
-                this.updateUser(decodedToken)
-                this.$router.push('/')
-            } catch (e) {
-                this.errorMessage = e.response.data.error
-            }
-        },
-        async sendResetRequest() {
-            if (!this.email) {
-                this.errorMessage = "Veuillez remplir l'email"
-                return
-            }
-            const params = { email: this.email }
-            try {
-                const response = await this.$http.post('/user/reset-password', params)
-                this.successMessage = response.data.message
-                this.errorMessage = ''
-            } catch (error) {
-                this.errorMessage = error
-                this.successMessage = ''
-            }
-        }
     }
 }
 </script>

@@ -15,26 +15,8 @@ const store = createStore({
     setUser(state, user) {
       state.user = user
     },
-    addToCart(state, item) {
-      const itemData = {
-        id: item._id,
-        name: item.name,
-        price: item.price,
-        quantity: 1,
-      }
-      const existingProduct = state.cart.items.find(product => product.id === itemData.id)
-      if (existingProduct) {
-        existingProduct.quantity += 1
-      } else {
-        state.cart.items.push(itemData)
-      }
-      const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
-      const cartData = JSON.stringify(state.cart)
-      const panierCrypte = CryptoJS.AES.encrypt(cartData, cleCryptage).toString()
-      localStorage.setItem('cart', panierCrypte)
-    },
-    updateItemCart(state, cart) {
-      state.cart.items = cart
+    updateToCart(state, items) {
+      state.cart.items = items
       const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
       const cartData = JSON.stringify(state.cart)
       const panierCrypte = CryptoJS.AES.encrypt(cartData, cleCryptage).toString()

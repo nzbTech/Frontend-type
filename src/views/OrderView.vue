@@ -4,122 +4,135 @@
       <div class="notification is-primary text-align-center">
           C'est un exemple de notification Bulma.
       </div>
-    <div class="columns">
+    <div class="columns padding">
       <div class="column is-half">
-        <div class="customer-info">
-          <h1>Informations client</h1>
-          <template v-if="getUser">
+        <div v-if="!getUser">
+          <div class="center">
+            <h2 class="subtitle">Continuer en tant qu'invité</h2>
+            <button class="button" @click="toggleModalLogin">Déjà client ? Cliquez ici pour vous connecter</button>
+          </div>
+          <div 
+            v-if="openLogin"
+            class="border">
+            <i class="top-left fa-solid fa-x custom-cursor" @click="openLogin = false"></i>
             <form>
-              {{ getUser }}
-              <div class="field">
-                <label class="label" for="firstName">Prénom:</label>
-                <div class="control">
-                  <input class="input" type="text" id="firstName" v-model="getUser.firstname" required>
+              <div class="columns">
+                <div class="field column">
+                  <label class="label">Email</label>
+                  <div class="control has-icons-left">
+                      <input 
+                          type="email" 
+                          placeholder="guillaume@gmail.com" 
+                          class="input" 
+                          v-model="customer.email">
+                      <span class="icon is-small is-left">
+                      <i class="fa fa-envelope"></i>
+                      </span>
+                  </div>
+                </div>
+                <div class="field column">
+                  <label class="label">Mot de passe</label>
+                  <div class="control has-icons-left">
+                      <input 
+                          type="password" 
+                          placeholder="*******" 
+                          class="input" 
+                          v-model="customer.password">
+                      <span class="icon is-small is-left">
+                      <i class="fa fa-lock"></i>
+                      </span>
+                  </div>
                 </div>
               </div>
-              <div class="field">
-                <label class="label" for="lastName">Nom:</label>
-                <div class="control">
-                  <input class="input" type="text" id="lastName" v-model="getUser.lastname" required>
+              <div class="columns">
+                <div class="field column">
+                  <div>
+                      <form @submit="sendResetRequest">
+                      <button class="button" type="submit">J'ai oublié mon mot de passe</button>
+                      </form>
+                      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+                      <p v-else-if="successMessage" class="success-message">{{ successMessage }}</p>
+                  </div>
+                  <!-- <div v-if="errorMessage" class="error-message">
+                      {{ errorMessage }}
+                  </div> -->
                 </div>
-              </div>
-              <!-- <div class="field">
-                <label class="label" for="address">Adresse:</label>
-                <div class="control">
-                  <input class="input" type="text" id="address" v-model="getUser.address" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label" for="city">Ville:</label>
-                <div class="control">
-                  <input class="input" type="text" id="city" v-model="getUser.city" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label" for="postalCode">Code Postal:</label>
-                <div class="control">
-                  <input class="input" type="text" id="postalCode" v-model="getUser.zipcode" required>
-                </div>
-              </div> -->
-            </form>
-            <button class="button" @click="login">Connexion</button>
-          </template>
-          <template v-else>
-            <form>
-              <div class="field">
-                <label class="label" for="firstName">Prénom:</label>
-                <div class="control">
-                  <input class="input" type="text" id="firstName" v-model="customer.firstname" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label" for="lastName">Nom:</label>
-                <div class="control">
-                  <input class="input" type="text" id="lastName" v-model="customer.lastname" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label" for="address">Adresse:</label>
-                <div class="control">
-                  <input class="input" type="text" id="address" v-model="customer.address" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label" for="city">Ville:</label>
-                <div class="control">
-                  <input class="input" type="text" id="city" v-model="customer.city" required>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label" for="postalCode">Code Postal:</label>
-                <div class="control">
-                  <input class="input" type="text" id="postalCode" v-model="customer.zipcode" required>
+                <div class="field column">
+                  <button 
+                      class="button"
+                      @click="login(origin)">
+                      Se connecter
+                  </button>
                 </div>
               </div>
             </form>
-          </template>
+          </div>
+        </div>
+        <div>
+          <form>
+            <div class="columns">
+              <div class="field column">
+                <label class="label" for="firstName">Prénom:</label>
+                <div class="control">
+                  <input class="input" type="text" id="firstName" v-model="customer.firstname">
+                </div>
+              </div>
+              <div class="field column">
+                <label class="label" for="lastName">Nom:</label>
+                <div class="control">
+                  <input class="input" type="text" id="lastName" v-model="customer.name">
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="address">Adresse:</label>
+              <div class="control">
+                <input class="input" type="text" id="address" v-model="customer.address">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="city">Ville:</label>
+              <div class="control">
+                <input class="input" type="text" id="city" v-model="customer.city">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="postalCode">Code Postal:</label>
+              <div class="control">
+                <input class="input" type="text" id="postalCode" v-model="customer.zipcode">
+              </div>
+            </div>
+          </form>
         </div>
       </div>
       <div class="column is-half">
         <div class="cart-summary">
-          <h2>Récapitulatif du panier</h2>
+          <h2 class="subtitle center">Récapitulatif du panier</h2>
           <ul>
             <li v-for="item in getCart.items" :key="item.id">
               {{ item.name }} - {{ item.price }} €  x {{ item.quantity }} ({{ item.price *  item.quantity }} €)
             </li>
           </ul>
-          <p>Total: {{ getTotalPrice() }} €</p>
-          <div class="field">
-            <label class="label" for="promoCode">Code promo:</label>
-            <div class="control">
-              <input class="input" type="text" id="promoCode" v-model="promoCode">
+          <div class="field columns">
+            <label class="label column is-3" for="promoCode">Code promo:</label>
+            <div class="control column">
+              <input class="input" type="text" id="promoCode">
+            </div>
+            <div class="column">
+            <button class="button" @click="applyPromoCode">Vérifier le code promo</button>
             </div>
           </div>
-          <button class="button" @click="applyPromoCode">Vérifier le code promo</button>
+          <p class="subtitle mb-5">Total: {{ getTotalPrice() }} €</p>
         </div>
         <div class="payment-form">
-          <h2>Formulaire de carte de paiement</h2>
-          <form>
-            <div class="field">
-              <label class="label" for="cardNumber">Numéro de carte:</label>
-              <div class="control">
-                <input class="input" type="text" id="cardNumber" v-model="cardNumber" required>
-              </div>
-            </div>
-            <div class="field">
-              <label class="label" for="expiryDate">Date d'expiration:</label>
-              <div class="control">
-                <input class="input" type="text" id="expiryDate" v-model="expiryDate" required>
-              </div>
-            </div>
-            <div class="field">
-              <label class="label" for="cvv">CVV:</label>
-              <div class="control">
-                <input class="input" type="text" id="cvv" v-model="cvv" required>
-              </div>
-            </div>
+          <form @submit.prevent="submitPayment" class="stripe-form">
+            <div id="card-number-element"></div>
+            <div id="card-expiry-element"></div>
+            <div id="card-cvc-element"></div>
+            <div id="postal-code-element"></div>
+            <div id="card-errors" role="alert"></div>
+            <button class="btn btn-primary">Submit Payment</button>
           </form>
-          <button class="button" @click="submitForm">Envoyer le formulaire</button>
         </div>
       </div>
     </div>
@@ -128,16 +141,17 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  // import { loadStripe } from "@stripe/stripe-js"
+  import { loadStripe } from "@stripe/stripe-js"
   
   export default {
     data() {
       return {
+        origin:'OrderView',
         stripe: null,
         elements: null,
         card: null,
-        cardholderName: '',
-        cardholderEmail: '',
+        cardholderName: null,
+        cardholderEmail: null,
         customer: {
           firstName: '',
           lastName: '',
@@ -145,91 +159,98 @@
           city: '',
           postalCode: ''
         },
+        openLogin: false,
+        cardNumberElement: null,
+        cardExpiryElement: null,
+        cardCvcElement: null,
+        postalCodeElement: null,
       }
     },
     computed: {
       ...mapGetters(['getCart','getUser'])
     },
     async mounted() {
-      // await this.getPreOrder()
-      // this.stripe = await loadStripe(process.env.VUE_APP_STRIPE_PUBLIC_KEY)
-      // this.elements = this.stripe.elements()
-      // this.card = this.elements.create('card')
-      // this.card.mount('#card-element')
-  
-      // this.card.on('change', function(event) {
-      //   var displayError = document.getElementById('card-errors')
-      //   if (event.error) {
-      //     displayError.textContent = event.error.message
-      //   } else {
-      //     displayError.textContent = ''
-      //   }
-      // })
-      // Vous pouvez maintenant utiliser `this.stripe` dans les autres méthodes de ce composant
+      await this.init()
+      await this.initStripe()
     },
     methods: {
-      getTotalPrice() {
-        return this.getCart.items.reduce((total, item) => total + item.price * item.quantity, 0)
+      async init() {
+        if  (this.getUser) {
+          await this.getUserData()
+        }
       },
-      async submitPayment() {
-        // Get payment intent from backend
-        const response = await fetch('http://localhost:3000/api/create-payment-intent', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            total: 1000,  // En centimes
-            email: this.cardholderEmail,
-            items: [
-              {
-                id: 'item1',
-                quantity: 1,
-              },
-              {
-                id: 'item2',
-                quantity: 3,
-              },
-            ],
+      async getUserData() {
+        const result = await this.$http.get('/user/' + this.getUser.userId)
+        this.savedCustomer = result.data
+        this.customer = result.data
+      },
+      async initStripe() {
+        // CREATION DOM STRIPE //
+        this.stripe = await loadStripe(process.env.VUE_APP_STRIPE_PUBLIC_KEY)
+        this.elements = this.stripe.elements()
+
+        this.cardNumberElement = this.elements.create("cardNumber")
+        this.cardNumberElement.mount("#card-number-element")
+
+        this.cardExpiryElement = this.elements.create("cardExpiry")
+        this.cardExpiryElement.mount("#card-expiry-element")
+
+        this.cardCvcElement = this.elements.create("cardCvc")
+        this.cardCvcElement.mount("#card-cvc-element")
+
+        this.postalCodeElement = this.elements.create("postalCode")
+        this.postalCodeElement.mount("#postal-code-element")
+
+        // GESTION ERREURS STRIPE //
+        let displayError = document.getElementById('card-errors')
+        const elements = [
+          this.cardNumberElement,
+          this.cardExpiryElement,
+          this.cardCvcElement,
+          this.postalCodeElement
+        ]
+        elements.forEach(element => {
+          element.on('change', function(event) {
+            if (event.error) {
+              displayError.textContent = event.error.message
+            } else {
+              displayError.textContent = ''
+            }
           })
         })
-        const data = await response.json()
-        console.log('data ==>', data)
-        console.log('data.clientSecret ==>', data.client_secret)
-        // Confirm the card payment
-        console.log('this.card =>', this.card)
-        const result = await this.stripe.confirmCardPayment(data.client_secret, {
+      },
+      async submitPayment() {
+        // CREATION PAIEMENT STRIPE //
+        const response = await this.$http.post('/create-payment-intent')
+        const client_secret = response.data.client_secret
+        const result = await this.stripe.confirmCardPayment(client_secret, {
           payment_method: {
-            card: this.card,
+            card: this.cardNumberElement,
             billing_details: {
               name: 'leger',
               email: 'guillaumeleger140@gmail.com'
             }
           }
         })
-  
         if (result.error) {
-          // Inform the user if there was an error
           var errorElement = document.getElementById('card-errors')
           errorElement.textContent = result.error.message
         } else {
-          // Payment has been processed
           if (result.paymentIntent.status === 'succeeded') {
             console.log("Payment processed successfully!")
           }
         }
       },
-      // async getPreOrder() {
-      //   try {
-      //       console.log('preOrder data =>')
-      //       const shopcart = localStorage.getItem('cart')
-      //       const result = await this.$http.get(`/pre-order/?${shopcart}`)
-      //       console.log('result =>', result)
-      //   } catch (e) {
-      //       console.log(e)
-      //   }
-
-      // }
+      getTotalPrice() {
+        return this.getCart.items.reduce((total, item) => total + item.price * item.quantity, 0)
+      },
+      toggleModalLogin() {
+        if (this.openLogin) {
+          this.openLogin = false
+        } else {
+          this.openLogin = true
+        }
+      }
     },
     beforeUnmount() {
       // Clean up elements
@@ -240,5 +261,102 @@
     }
   }
   
-  </script>
+</script>
+
+<style>
+.center {
+  text-align: center;
+}
+.subtitle {
+  font-weight: 600;
+  line-height: 1.125;
+  font-size: 1.2rem;
+}
+.button {
+  margin-bottom: 10px;
+}
+/* .button2 {
+  padding-top: inherit;
+} */
+.columns {
+  margin-top: inherit;
+  margin-left: inherit;
+}
+.columns:not(:last-child) {
+  margin-bottom: inherit;
+}
+.column {
+  padding-left: inherit;
+}
+.col
+.border {
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-bottom: 10px;
+}
+.top-left {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+.custom-cursor {
+  cursor: pointer;
+}
+.padding {
+  padding: 10px;
+}
+
+/* .payment-form {
+  width: 50%;
+} */
+
+.stripe-form {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  height: 38px;
+  width: 100%;
+  background: white;
+}
+
+.btn {
+  color: white;
+  background-color: #007bff;
+  border-color: #007bff;
+  padding: .375rem .75rem;
+  border-radius: .25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+#card-errors {
+  color: red;
+  margin-top: 10px;
+}
+.label {
+  display: flex;
+  align-items: center;
+}
+
+</style>
   

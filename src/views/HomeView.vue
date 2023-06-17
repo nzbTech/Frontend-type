@@ -42,7 +42,7 @@
                       <div class="column">
                         <button 
                           class="button is-primary"
-                          @click="addToCart(product)"><i class="fas fa-shopping-basket"></i></button>
+                          @click="addItem(product)"><i class="fas fa-shopping-basket"></i></button>
                       </div>
                     </div>
                   </div>
@@ -79,7 +79,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getUser', 'getCart'])
   },
   mounted() {
     const user = this.getUser
@@ -89,8 +89,21 @@ export default {
     this.getProducts()
   },
   methods: {
-    addToCart(item) {
-      this.$store.commit('addToCart', item)
+    addItem(item) {
+      const itemData = {
+        id: item._id,
+        name: item.name,
+        price: item.price,
+        quantity: 1,
+      }
+      let items = this.getCart.items
+      let itemAlreadyInCart = items.find(i => i.id === item._id)
+      if (itemAlreadyInCart) {
+        itemAlreadyInCart.quantity++
+      } else {
+        items.push(itemData)
+      }
+      this.$store.commit('updateToCart', items)
     },
     async getProducts(page) {
       if (page) {

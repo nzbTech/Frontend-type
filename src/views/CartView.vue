@@ -64,30 +64,30 @@ export default {
     checkout() {
       this.$router.push('/pre-order')
     },
-    incrementQuantity(item) {
-      let cart = this.getCart.items
-      let cartItem = cart.find(i => i.id === item.id)
-      if (cartItem) {
-        cartItem.quantity++
-        this.$store.commit('updateItemCart', cart)
+    incrementQuantity(currentItem) {
+      let items = this.getCart.items
+      let item = items.find(i => i.id === currentItem.id)
+      if (item) {
+        item.quantity++
+        this.$store.commit('updateToCart', items)
       }
     },
-    decrementQuantity(item) {
-      let cart = this.getCart.items
-      let cartItem = cart.find(i => i.id === item.id)
-      if (cartItem && cartItem.quantity > 1) {
-        cartItem.quantity--
-        this.$store.commit('updateItemCart', cart)
+    decrementQuantity(currentItem) {
+      let items = this.getCart.items
+      let item = items.find(i => i.id === currentItem.id)
+      if (item && item.quantity > 1) {
+        item.quantity--
+        this.$store.commit('updateToCart', items)
       }
-      else if (cartItem && cartItem.quantity == 1) {
-        cart = cart.filter(i => i.id !== item.id)
-        this.$store.commit('updateItemCart', cart)
+      else if (item && item.quantity == 1) {
+        items = items.filter(i => i.id !== item.id)
+        this.$store.commit('updateToCart', items)
       }
     },
     removeFromCart(item) {
-      let cart = this.getCart.items
-      let newCart = cart.filter(i => i.id !== item.id)
-      this.$store.commit('updateItemCart', newCart)
+      let items = this.getCart.items
+      let newItems = items.filter(i => i.id !== item.id)
+      this.$store.commit('updateToCart', newItems)
     }
   }
 }
