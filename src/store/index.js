@@ -6,7 +6,7 @@ const store = createStore({
     return {
       user: null,
       cart: {
-        items: [],
+        products: [],
         promo: null
       }
     }
@@ -15,13 +15,18 @@ const store = createStore({
     setUser(state, user) {
       state.user = user
     },
-    updateToCart(state, items) {
-      state.cart.items = items
+    updateToCart(state, payload) {
+      const { obj, source } = payload
+      if (source === 'products') {
+        state.cart.products = obj
+      } else if (source === 'promo') {
+        state.cart.promo = obj
+      }
       const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
       const cartData = JSON.stringify(state.cart)
       const panierCrypte = CryptoJS.AES.encrypt(cartData, cleCryptage).toString()
       localStorage.setItem('cart', panierCrypte)
-    }
+    },
   },
   actions: {
     updateUser({ commit }, user) {
@@ -33,8 +38,8 @@ const store = createStore({
       return state.user
     },
     cartItemsCount(state) {
-      if (state.cart && state.cart.items) {
-        return state.cart.items.length
+      if (state.cart && state.cart.products) {
+        return state.cart.products.length
       } else {
         return null
       }

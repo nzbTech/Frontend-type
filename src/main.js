@@ -41,8 +41,7 @@ if (cartData) {
   const decryptedBytes = CryptoJS.AES.decrypt(cartData, cleCryptage)
   const panierDecrypte = decryptedBytes.toString(CryptoJS.enc.Utf8)
   store.state.cart = JSON.parse(panierDecrypte)
-  // console.log('panier crypted =>', cartData)
-  console.log('panier decrypted =>', panierDecrypte)
+  console.log('panier => ', panierDecrypte)
 }
 
 app.config.globalProperties.$http = axios

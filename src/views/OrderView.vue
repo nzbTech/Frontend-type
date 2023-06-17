@@ -109,7 +109,7 @@
         <div class="cart-summary">
           <h2 class="subtitle center">Récapitulatif du panier</h2>
           <ul>
-            <li v-for="item in getCart.items" :key="item.id">
+            <li v-for="item in getCart.products" :key="item.id">
               {{ item.name }} - {{ item.price }} €  x {{ item.quantity }} ({{ item.price *  item.quantity }} €)
             </li>
           </ul>
@@ -242,7 +242,7 @@
         }
       },
       getTotalPrice() {
-        return this.getCart.items.reduce((total, item) => total + item.price * item.quantity, 0)
+        return this.getCart.products.reduce((total, item) => total + item.price * item.quantity, 0)
       },
       toggleModalLogin() {
         if (this.openLogin) {

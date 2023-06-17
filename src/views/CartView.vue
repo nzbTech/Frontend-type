@@ -6,7 +6,7 @@
         </div>
         <section class="section">
         <div
-            v-if="getCart.items.length > 0"
+            v-if="getCart.products.length > 0"
             class="container">
         <table class="table is-striped is-fullwidth">
             <thead>
@@ -19,16 +19,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(item, index) in getCart.items" :key="index">
-                <td>{{ item.name }}</td>
-                <td>{{ item.price }}</td>
+            <tr v-for="(product, index) in getCart.products" :key="index">
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
                 <td>
-                <button class="button is-small" @click="decrementQuantity(item)">-</button>
-                {{ item.quantity }}
-                <button class="button is-small" @click="incrementQuantity(item)">+</button>
+                <button class="button is-small" @click="decrementQuantity(product)">-</button>
+                {{ product.quantity }}
+                <button class="button is-small" @click="incrementQuantity(product)">+</button>
                 </td>
-                <td>{{ item.quantity * item.price }}</td>
-                <td><button class="button is-danger is-small" @click="removeFromCart(item)">Supprimer</button></td>
+                <td>{{ product.quantity * product.price }}</td>
+                <td><button class="button is-danger is-small" @click="removeFromCart(product)">Supprimer</button></td>
             </tr>
             </tbody>
         </table>
@@ -55,7 +55,7 @@ export default {
   computed: {
     ...mapGetters(['getCart']),
     total() {
-      return this.getCart.items.reduce((total, item) => total + item.price * item.quantity, 0)
+      return this.getCart.products.reduce((total, product) => total + product.price * product.quantity, 0)
     }
   },
   mounted() {
@@ -64,30 +64,30 @@ export default {
     checkout() {
       this.$router.push('/pre-order')
     },
-    incrementQuantity(currentItem) {
-      let items = this.getCart.items
-      let item = items.find(i => i.id === currentItem.id)
-      if (item) {
-        item.quantity++
-        this.$store.commit('updateToCart', items)
+    incrementQuantity(currentProduct) {
+      let products = this.getCart.products
+      let product = products.find(i => i.id === currentProduct.id)
+      if (product) {
+        product.quantity++
+        this.$store.commit('updateToCart', { obj: products, source: 'products' })
       }
     },
-    decrementQuantity(currentItem) {
-      let items = this.getCart.items
-      let item = items.find(i => i.id === currentItem.id)
-      if (item && item.quantity > 1) {
-        item.quantity--
-        this.$store.commit('updateToCart', items)
+    decrementQuantity(currentProduct) {
+      let products = this.getCart.products
+      let product = products.find(i => i.id === currentProduct.id)
+      if (product && product.quantity > 1) {
+        product.quantity--
+        this.$store.commit('updateToCart', { obj: products, source: 'products' })
       }
-      else if (item && item.quantity == 1) {
-        items = items.filter(i => i.id !== item.id)
-        this.$store.commit('updateToCart', items)
+      else if (product && product.quantity == 1) {
+        products = products.filter(i => i.id !== product.id)
+        this.$store.commit('updateToCart', { obj: products, source: 'products' })
       }
     },
-    removeFromCart(item) {
-      let items = this.getCart.items
-      let newItems = items.filter(i => i.id !== item.id)
-      this.$store.commit('updateToCart', newItems)
+    removeFromCart(currentProduct) {
+      let products = this.getCart.products
+      let newProducts = products.filter(i => i.id !== currentProduct.id)
+      this.$store.commit('updateToCart', { obj: newProducts, source: 'products' })
     }
   }
 }

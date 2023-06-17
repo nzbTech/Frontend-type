@@ -89,21 +89,21 @@ export default {
     this.getProducts()
   },
   methods: {
-    addItem(item) {
+    addItem(product) {
       const itemData = {
-        id: item._id,
-        name: item.name,
-        price: item.price,
+        id: product._id,
+        name: product.name,
+        price: product.price,
         quantity: 1,
       }
-      let items = this.getCart.items
-      let itemAlreadyInCart = items.find(i => i.id === item._id)
-      if (itemAlreadyInCart) {
-        itemAlreadyInCart.quantity++
+      let products = this.getCart.products
+      let productAlreadyInCart = products.find(i => i.id === product._id)
+      if (productAlreadyInCart) {
+        productAlreadyInCart.quantity++
       } else {
-        items.push(itemData)
+        products.push(itemData)
       }
-      this.$store.commit('updateToCart', items)
+      this.$store.commit('updateToCart', { obj: products, source: 'products' })
     },
     async getProducts(page) {
       if (page) {

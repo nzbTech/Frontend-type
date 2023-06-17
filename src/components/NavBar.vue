@@ -16,9 +16,9 @@
                 <a class="navbar-item">
                     <router-link class="button" to="/"><strong>Accueil</strong></router-link>
                 </a>
-                <a class="navbar-item">
+                <!-- <a class="navbar-item">
                     <router-link to="/about">Test</router-link>
-                </a>
+                </a> -->
             </div>
             <div class="navbar-end">
                 <div class="navbar-item">
