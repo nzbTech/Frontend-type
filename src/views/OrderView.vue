@@ -113,15 +113,23 @@
               {{ item.name }} - {{ item.price }} €  x {{ item.quantity }} ({{ item.price *  item.quantity }} €)
             </li>
           </ul>
+          <p class="subtitle2 mb-5">Sous total: {{ getSousTotalPrice() }} €</p>
           <div class="field columns">
             <label class="label column is-3" for="promoCode">Code promo:</label>
             <div class="control column">
-              <input class="input" type="text" id="promoCode">
+              <input class="input" type="text" id="promoCode" v-model="codePromo">
             </div>
             <div class="column">
-            <button class="button" @click="applyPromoCode">Vérifier le code promo</button>
+            <button class="button" @click="checkCodePromo">Vérifier le code promo</button>
             </div>
           </div>
+          <div 
+            v-if="getCart.promo"
+            class="columns">
+            <p class="subtitle2 mb-5 has-text-primary border-style">{{ getCart.promo.name }} <i class="fa-solid fa-x fa-xs custom-cursor" v-on:click="deleteCodePromo"></i></p>
+            <p class="subtitle2 mb-5 has-text-primary">({{ getCart.promo.percentage }}%)</p>
+          </div>
+          <div id="promo-errors" role="alert"></div>
           <p class="subtitle mb-5">Total: {{ getTotalPrice() }} €</p>
         </div>
         <div class="payment-form">
@@ -149,6 +157,7 @@
         origin:'OrderView',
         stripe: null,
         elements: null,
+        codePromo: null,
         card: null,
         cardholderName: null,
         cardholderEmail: null,
@@ -175,14 +184,14 @@
     },
     methods: {
       async init() {
-        if  (this.getUser) {
-          await this.getUserData()
-        }
+        await this.getUserData()
       },
       async getUserData() {
-        const result = await this.$http.get('/user/' + this.getUser.userId)
-        this.savedCustomer = result.data
-        this.customer = result.data
+        if  (this.getUser) {
+          const result = await this.$http.get('/user/' + this.getUser.userId)
+          this.savedCustomer = result.data
+          this.customer = result.data
+        }
       },
       async initStripe() {
         // CREATION DOM STRIPE //
@@ -241,8 +250,41 @@
           }
         }
       },
+      async checkCodePromo() {
+        var errorElement = document.getElementById('promo-errors')
+        if (!this.codePromo || this.codePromo == "" || this.codePromo == null) {
+          errorElement.textContent = 'renseigner un code promo'
+          return
+        } else {
+          errorElement.textContent = ''
+        }
+        const result = await this.$http.post('/check-promo', {name: this.codePromo})
+        if (result.data) {
+          this.getCart.promo = result.data
+          this.$store.commit('updateToCart', { obj: this.getCart.promo, source: 'promo' })
+          errorElement.textContent = ''
+        } else {
+          errorElement.textContent = 'code promo inexistant'
+        }
+      },
+      async deleteCodePromo() {
+          this.getCart.promo = null
+          this.$store.commit('updateToCart', { obj: this.getCart.promo, source: 'promo' })
+      },
+      getSousTotalPrice() {
+        const sousTotalPrice = this.getCart.products.reduce((total, item) => total + item.price * item.quantity, 0);
+        return sousTotalPrice.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      },
       getTotalPrice() {
-        return this.getCart.products.reduce((total, item) => total + item.price * item.quantity, 0)
+        const totalPrice = this.getCart.products.reduce((total, item) => total + item.price * item.quantity, 0);
+        
+        if (this.getCart.promo && this.getCart.promo.percentage) {
+          const promoAmount = (totalPrice * this.getCart.promo.percentage) / 100;
+          const finalPrice = totalPrice - promoAmount
+          return finalPrice.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        
+        return totalPrice.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       },
       toggleModalLogin() {
         if (this.openLogin) {
@@ -272,12 +314,22 @@
   line-height: 1.125;
   font-size: 1.2rem;
 }
+.subtitle2 {
+  font-weight: 600;
+  line-height: 1.125;
+  font-size: 1rem;
+  padding: 5px;
+}
+.border-style {
+  border-radius: 5px;
+  border: 1px solid #00d1b2;
+}
+.custom-cursor {
+  cursor: pointer;
+}
 .button {
   margin-bottom: 10px;
 }
-/* .button2 {
-  padding-top: inherit;
-} */
 .columns {
   margin-top: inherit;
   margin-left: inherit;
@@ -310,10 +362,6 @@
 .padding {
   padding: 10px;
 }
-
-/* .payment-form {
-  width: 50%;
-} */
 
 .stripe-form {
   background: #f8f9fa;
