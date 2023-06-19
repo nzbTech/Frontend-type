@@ -40,6 +40,7 @@ if (cartData) {
   const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
   const decryptedBytes = CryptoJS.AES.decrypt(cartData, cleCryptage)
   const panierDecrypte = decryptedBytes.toString(CryptoJS.enc.Utf8)
+  store.state.cartId = cartData
   store.state.cart = JSON.parse(panierDecrypte)
   console.log('panier => ', panierDecrypte)
 }

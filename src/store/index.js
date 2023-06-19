@@ -8,7 +8,8 @@ const store = createStore({
       cart: {
         products: [],
         promo: null
-      }
+      },
+      cartId: null
     }
   },
   mutations: {
@@ -46,6 +47,9 @@ const store = createStore({
     },
     getCart(state) {
       return state.cart
+    },
+    getCartId(state) {
+      return state.cartId
     }
   }
 })

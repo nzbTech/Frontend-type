@@ -176,15 +176,16 @@
       }
     },
     computed: {
-      ...mapGetters(['getCart','getUser'])
+      ...mapGetters(['getCart', 'getCartId', 'getUser'])
     },
     async mounted() {
       await this.init()
-      await this.initStripe()
     },
     methods: {
       async init() {
         await this.getUserData()
+        await this.initStripe()
+        await this.checkProductsInCart()
       },
       async getUserData() {
         if  (this.getUser) {
@@ -228,9 +229,20 @@
           })
         })
       },
+      async checkProductsInCart() {
+        // CHECK IF PRODUCTS ALREADY EXIST //
+        const response = await this.$http.post('/check-products', { cart:  this.getCart})
+        console.log('response =>', response.data)
+        const products = response.data.products
+        this.$store.commit('updateToCart', { obj: products, source: 'products' })
+      },
       async submitPayment() {
         // CREATION PAIEMENT STRIPE //
-        const response = await this.$http.post('/create-payment-intent')
+        const params = {
+            user: this.customer,
+            cart:  this.getCartId
+        } 
+        const response = await this.$http.post('/create-payment-intent', params)
         const client_secret = response.data.client_secret
         const result = await this.stripe.confirmCardPayment(client_secret, {
           payment_method: {
@@ -272,19 +284,19 @@
           this.$store.commit('updateToCart', { obj: this.getCart.promo, source: 'promo' })
       },
       getSousTotalPrice() {
-        const sousTotalPrice = this.getCart.products.reduce((total, item) => total + item.price * item.quantity, 0);
-        return sousTotalPrice.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const sousTotalPrice = this.getCart.products.reduce((total, item) => total + item.price * item.quantity, 0)
+        return sousTotalPrice.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       },
       getTotalPrice() {
-        const totalPrice = this.getCart.products.reduce((total, item) => total + item.price * item.quantity, 0);
+        const totalPrice = this.getCart.products.reduce((total, item) => total + item.price * item.quantity, 0)
         
         if (this.getCart.promo && this.getCart.promo.percentage) {
           const promoAmount = (totalPrice * this.getCart.promo.percentage) / 100;
           const finalPrice = totalPrice - promoAmount
-          return finalPrice.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          return finalPrice.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         }
-        
-        return totalPrice.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        return totalPrice.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       },
       toggleModalLogin() {
         if (this.openLogin) {
