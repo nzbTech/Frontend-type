@@ -58,11 +58,18 @@ export default {
       return this.getCart.products.reduce((total, product) => total + product.price * product.quantity, 0)
     }
   },
-  mounted() {
+  async mounted() {
+    await this.checkProductsInCart()
   },
   methods: {
     checkout() {
       this.$router.push('/pre-order')
+    },
+    async checkProductsInCart() {
+      // CHECK IF PRODUCTS ALREADY EXIST //
+      const response = await this.$http.post('/check-products', { cart:  this.getCart})
+      const products = response.data.products
+      this.$store.commit('updateToCart', { obj: products, source: 'products' })
     },
     incrementQuantity(currentProduct) {
       let products = this.getCart.products

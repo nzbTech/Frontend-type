@@ -232,7 +232,6 @@
       async checkProductsInCart() {
         // CHECK IF PRODUCTS ALREADY EXIST //
         const response = await this.$http.post('/check-products', { cart:  this.getCart})
-        console.log('response =>', response.data)
         const products = response.data.products
         this.$store.commit('updateToCart', { obj: products, source: 'products' })
       },
