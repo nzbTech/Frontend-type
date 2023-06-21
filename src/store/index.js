@@ -26,6 +26,7 @@ const store = createStore({
       const cleCryptage = process.env.VUE_APP_CRYPTO_SECRET
       const cartData = JSON.stringify(state.cart)
       const panierCrypte = CryptoJS.AES.encrypt(cartData, cleCryptage).toString()
+      state.cartId = panierCrypte
       localStorage.setItem('cart', panierCrypte)
     },
   },
