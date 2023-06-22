@@ -150,6 +150,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import { loadStripe } from "@stripe/stripe-js"
+  import isEqual from 'lodash/isEqual';
   
   export default {
     data() {
@@ -231,12 +232,26 @@
       },
       async checkProductsInCart() {
         // CHECK IF PRODUCTS ALREADY EXIST //
-        const response = await this.$http.post('/check-products', { cart:  this.getCart})
-        const products = response.data.products
-        this.$store.commit('updateToCart', { obj: products, source: 'products' })
+        console.log('this.getCart =>', this.getCart)
+      },
+      async checkCartData() {
+        const result = await this.$http.post('/check-products', { cart:  this.getCart})
+        let cartChecked = result.data
+        if (isEqual(cartChecked, this.getCart)) {
+          return true
+        } else {
+          this.$store.commit('updateToCart', { obj: cartChecked.products, source: 'products' })
+          return false
+        }
       },
       async submitPayment() {
         // CREATION PAIEMENT STRIPE //
+        let cartUpToDate = await this.checkCartData()
+        if (!cartUpToDate) {
+          console.log('Attention ! Le prix d\'un article a changé')
+          return
+        }
+        console.log('next =>')
         const params = {
             user: this.customer,
             cart:  this.getCartId
@@ -351,7 +366,6 @@
 .column {
   padding-left: inherit;
 }
-.col
 .border {
   position: relative;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
