@@ -87,19 +87,25 @@
             <div class="field">
               <label class="label" for="address">Adresse:</label>
               <div class="control">
-                <input class="input" type="text" id="address" v-model="customer.address">
+                <input class="input" type="text" id="address" v-model="customer.address.line">
               </div>
             </div>
             <div class="field">
               <label class="label" for="city">Ville:</label>
               <div class="control">
-                <input class="input" type="text" id="city" v-model="customer.city">
+                <input class="input" type="text" id="city" v-model="customer.address.city">
               </div>
             </div>
             <div class="field">
-              <label class="label" for="postalCode">Code Postal:</label>
+              <label class="label" for="postal_code">Code Postal:</label>
               <div class="control">
-                <input class="input" type="text" id="postalCode" v-model="customer.zipcode">
+                <input class="input" type="text" id="postalCode" v-model="customer.address.zip_code">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="country">Pays:</label>
+              <div class="control">
+                <input class="input" type="text" id="country" v-model="customer.address.country">
               </div>
             </div>
           </form>
@@ -165,9 +171,12 @@
         customer: {
           firstName: '',
           lastName: '',
-          address: '',
-          city: '',
-          postalCode: ''
+          address: {
+            line: '',
+            city: '',
+            zip_code: '',
+            country: ''
+          }
         },
         openLogin: false,
         cardNumberElement: null,
@@ -186,13 +195,30 @@
       async init() {
         await this.getUserData()
         await this.initStripe()
-        await this.checkProductsInCart()
       },
       async getUserData() {
         if  (this.getUser) {
           const result = await this.$http.get('/user/' + this.getUser.userId)
           this.savedCustomer = result.data
           this.customer = result.data
+        }
+      },
+      async updateUserData() {
+        if (this.getUser) {
+          await this.$http.patch('/user/update/' + this.getUser.userId, this.customer)
+          console.log('Utilisateur mis à jour')
+        } else {
+          console.log('Utilisateur mode invité')
+        }
+      },
+      async checkCartData() {
+        const result = await this.$http.post('/check-products', { cart:  this.getCart})
+        let cartChecked = result.data
+        if (isEqual(cartChecked, this.getCart)) {
+          return true
+        } else {
+          this.$store.commit('updateToCart', { obj: cartChecked.products, source: 'products' })
+          return false
         }
       },
       async initStripe() {
@@ -230,34 +256,23 @@
           })
         })
       },
-      async checkProductsInCart() {
-        // CHECK IF PRODUCTS ALREADY EXIST //
-        console.log('this.getCart =>', this.getCart)
-      },
-      async checkCartData() {
-        const result = await this.$http.post('/check-products', { cart:  this.getCart})
-        let cartChecked = result.data
-        if (isEqual(cartChecked, this.getCart)) {
-          return true
-        } else {
-          this.$store.commit('updateToCart', { obj: cartChecked.products, source: 'products' })
-          return false
-        }
-      },
       async submitPayment() {
         // CREATION PAIEMENT STRIPE //
+        await this.updateUserData()
+
         let cartUpToDate = await this.checkCartData()
         if (!cartUpToDate) {
           console.log('Attention ! Le prix d\'un article a changé')
           return
         }
-        console.log('next =>')
+
         const params = {
             user: this.customer,
             cart:  this.getCartId
         } 
         const response = await this.$http.post('/create-payment-intent', params)
         const client_secret = response.data.client_secret
+
         const result = await this.stripe.confirmCardPayment(client_secret, {
           payment_method: {
             card: this.cardNumberElement,
