@@ -145,7 +145,7 @@
             <div id="card-cvc-element"></div>
             <div id="postal-code-element"></div>
             <div id="card-errors" role="alert"></div>
-            <button class="btn btn-primary">Submit Payment</button>
+            <button class="btn btn-primary">Payer</button>
           </form>
         </div>
       </div>
@@ -221,6 +221,15 @@
           return false
         }
       },
+      async createOrder() {
+        console.log('createOrder =>')
+        const params = {
+            user: this.customer,
+            cart:  this.getCart
+        } 
+        const result = await this.$http.post('/orders/create', params)
+        console.log('result =>', result)
+      },
       async initStripe() {
         // CREATION DOM STRIPE //
         this.stripe = await loadStripe(process.env.VUE_APP_STRIPE_PUBLIC_KEY)
@@ -259,7 +268,7 @@
       async submitPayment() {
         // CREATION PAIEMENT STRIPE //
         await this.updateUserData()
-
+        await this.createOrder()
         let cartUpToDate = await this.checkCartData()
         if (!cartUpToDate) {
           console.log('Attention ! Le prix d\'un article a changé')
