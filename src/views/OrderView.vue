@@ -196,17 +196,9 @@
         await this.getUserData()
         await this.initStripe()
       },
-      async getUserData() {
-        if  (this.getUser) {
-          const result = await this.$http.get('/user/' + this.getUser.userId)
-          this.savedCustomer = result.data
-          this.customer = result.data
-        }
-      },
       async updateUserData() {
         if (this.getUser) {
           await this.$http.patch('/user/update/' + this.getUser.userId, this.customer)
-          console.log('Utilisateur mis à jour')
         } else {
           console.log('Utilisateur mode invité')
         }
@@ -222,13 +214,15 @@
         }
       },
       async createOrder() {
-        console.log('createOrder =>')
         const params = {
-            user: this.customer,
-            cart:  this.getCart
+          user: this.customer,
+          cart:  this.getCart
         } 
-        const result = await this.$http.post('/orders/create', params)
-        console.log('result =>', result)
+        try {
+          await this.$http.post('/orders/create', params)
+        } catch (error) {
+          console.log('error =>', error)
+        }
       },
       async initStripe() {
         // CREATION DOM STRIPE //

@@ -33,10 +33,18 @@ const myMixin = {
             this.$router.push('/')
           } else if (origin == 'OrderView') {
             this.openLogin = false
+            this.getUserData()
           }
       } catch (e) {
         console.log('e =>', e)
           this.errorMessage = e.response.data.error
+      }
+    },
+    async getUserData() {
+      if  (this.getUser) {
+        const result = await this.$http.get('/user/' + this.getUser.userId)
+        this.savedCustomer = result.data
+        this.customer = result.data
       }
     },
     async sendResetRequest() {
