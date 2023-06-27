@@ -240,29 +240,11 @@
 
         this.postalCodeElement = this.elements.create("postalCode")
         this.postalCodeElement.mount("#postal-code-element")
-
-        // GESTION ERREURS STRIPE //
-        let displayError = document.getElementById('card-errors')
-        const elements = [
-          this.cardNumberElement,
-          this.cardExpiryElement,
-          this.cardCvcElement,
-          this.postalCodeElement
-        ]
-        elements.forEach(element => {
-          element.on('change', function(event) {
-            if (event.error) {
-              displayError.textContent = event.error.message
-            } else {
-              displayError.textContent = ''
-            }
-          })
-        })
       },
       async submitPayment() {
+        await this.checkUserIsComplete(this.customer)
+
         // CREATION PAIEMENT STRIPE //
-        await this.updateUserData()
-        await this.createOrder()
         let cartUpToDate = await this.checkCartData()
         if (!cartUpToDate) {
           console.log('Attention ! Le prix d\'un article a changé')
@@ -290,6 +272,8 @@
           errorElement.textContent = result.error.message
         } else {
           if (result.paymentIntent.status === 'succeeded') {
+            await this.updateUserData()
+            await this.createOrder()
             console.log("Payment processed successfully!")
           }
         }
@@ -335,6 +319,15 @@
           this.openLogin = false
         } else {
           this.openLogin = true
+        }
+      },
+      async checkUserIsComplete(customer) {
+        let hasNullUserData = Object.values(customer).some(value => value === undefined || value === null || value === '')
+        let hasNullUserAddressData = Object.values(customer.address).some(value => value === undefined || value === null || value === '')
+        if (hasNullUserData || hasNullUserAddressData) {
+            console.log("Certaines données ne sont pas définies.")
+        } else {
+            console.log("Toutes les données sont définies.")
         }
       }
     },
