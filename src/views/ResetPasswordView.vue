@@ -10,6 +10,7 @@
   
 <script>
     import { mapActions } from 'vuex'
+    import axios from 'axios'
     export default {
     data() {
         return {
@@ -18,15 +19,27 @@
     },
     methods: {
         ...mapActions(['updateUser']),
-        resetPassword() {
-            try {
-                const resetToken = this.$route.params.id
-                console.log('resetToken =>', resetToken)
-                const result = this.$http.post('/user/reset-password/' + resetToken, { newPassword: this.newPassword, token: resetToken})
-                console.log(result)
-            } catch (e){
-                this.errorMessage = e
-            }
+        async resetPassword() {
+          // try {
+          //     const resetToken = this.$route.query.token
+              
+          //     const test = decodeURIComponent(resetToken)
+          //     console.log('test =>', test)
+          //     console.log('resetToken =>', resetToken)
+          //     const result =  this.$http.post('/auth/reset-password/2/' + resetToken, { newPassword: this.newPassword})
+          //     console.log('result =>', result)
+
+          // } catch (e){
+          //     this.errorMessage = e
+          // }
+          const url = this.$route.query.token
+          axios.post(url, {password: this.newPassword})
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(error => {
+            console.error('Erreur lors de la requête POST:', error)
+          })
         }
     }
 }

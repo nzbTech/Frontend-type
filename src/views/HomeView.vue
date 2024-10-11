@@ -1,11 +1,30 @@
 <template>
     <div class="home">
-        <h1 class="title">Produits</h1>
+        <h1 class="title">Home</h1>
         <div class="notification is-primary text-align-center">
-            C'est un exemple de notification Bulma.
+            notification Bulma.
         </div>
+
+        <!-- <TraidingViewWidget :symbol="'AAPL'" :width="'100%'" :height="'500px'" :theme="'light'"></TraidingViewWidget> -->
         <div v-if="loading" class="loading-indicator text-align-center">
-          <i class="fas fa-spinner fa-spin"></i> Chargement en cours...
+          <!-- <div id="app">
+            <div class="container">
+              <div id="bar">
+                <h1>Vue Email Editor (Demo)</h1>
+
+                <button v-on:click="saveDesign">Save Design</button>
+                <button v-on:click="exportHtml">Export HTML</button>
+              </div>
+
+              <EmailEditor
+                style="height:1000px"
+                ref="emailEditor"
+                v-on:load="editorLoaded"
+                v-on:ready="editorReady"
+              />
+            </div>
+          </div> -->
+          <!-- <i class="fas fa-spinner fa-spin"></i> Chargement en cours... -->
         </div>
         <div v-else>
           <div class="columns">
@@ -63,6 +82,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
+// import { EmailEditor } from 'vue-email-editor';
 export default {
   data() {
     return {
@@ -81,12 +102,33 @@ export default {
   computed: {
     ...mapGetters(['getUser', 'getCart'])
   },
+  // components: {
+  //   EmailEditor
+  // },
   mounted() {
     const user = this.getUser
     if (user) {
       console.log('user =>', user)
     }
-    this.getProducts()
+    // const socket = io('http://localhost:3333', {
+    //   auth: {
+    //     token: token,
+    //   },
+    // })
+    // socket.on('connect', () => {
+    //   console.log('Connecté au serveur WebSocket avec ID :', socket.id)
+    // })
+
+    // socket.emit('register', 'c1hi2bxmv1sivwqwqtsg5uhf')
+
+    // socket.on('ping',(data)=>{
+    //   console.log(data)
+    // })
+
+    // socket.on('message', (message) => {
+    //   console.log('Message reçu du serveur :', message)
+    // })
+    // this.getProducts()
   },
   methods: {
     addItem(product) {
@@ -140,6 +182,16 @@ export default {
     },
     updatePage(page) {
       this.getProducts(page)
+    },
+    saveDesign() {
+      this.$refs.emailEditor.editor.saveDesign((design) => {
+        console.log('saveDesign', design)
+      })
+    },
+    exportHtml() {
+      this.$refs.emailEditor.editor.exportHtml((data) => {
+        console.log('exportHtml', data)
+      })
     }
   }
 }

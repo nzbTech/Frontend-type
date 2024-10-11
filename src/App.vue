@@ -5,6 +5,44 @@
   </div>
 </template>
 
+<script>
+import socket from "./socket";
+
+export default {
+  name: 'App',
+  data() {
+    return {
+      usernameAlreadySelected: false,
+    };
+  },
+  methods: {
+  },
+  created() {
+    const token = localStorage.getItem('token')
+    if (token) {
+      const sessionId = localStorage.getItem('sessionId')
+      if (sessionId) {
+        socket.auth = { sessionId, token }
+        socket.connect()
+      } else {
+        socket.auth = { token }
+        socket.connect()
+      }
+    }
+    socket.on('session', ({ sessionId }) => {
+      localStorage.setItem('sessionId', sessionId)
+    })
+    // socket.on('test', ({ message }) => {
+    //   console.log('message', message)
+    // })
+  },
+  unmounted() {
+    socket.off("connect_error")
+  },
+}
+</script>
+
+
 <style>
 
 .title {
@@ -30,5 +68,4 @@ nav a {
 nav a.router-link-exact-active {
   color: #00d1b2;
 }
-
 </style>

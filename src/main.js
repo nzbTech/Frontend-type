@@ -13,10 +13,11 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import NavBar from '@/components/NavBar.vue'
 import FilterCollapse from '@/components/FilterCollapse.vue'
 import PaginationComponent from '@/components/PaginationComponent.vue'
+import TraidingViewWidget from '@/components/TraidingViewWidget.vue'
 import GenericMixin from '@/mixins/GenericMixin.js'
 
 window.process = process
-axios.defaults.baseURL = 'http://localhost:3000/api/'
+axios.defaults.baseURL = 'http://localhost:3333/api/'
 axios.interceptors.request.use(config => {
     const token = localStorage.getItem('token')
     if (token) {
@@ -49,6 +50,7 @@ app.config.globalProperties.$http = axios
 app.component('NavBar', NavBar)
 app.component('PaginationComponent', PaginationComponent)
 app.component('FilterCollapse', FilterCollapse)
+app.component('TraidingViewWidget', TraidingViewWidget)
 app.mixin(GenericMixin)
 
 app.use(store).use(router).mount('#app')

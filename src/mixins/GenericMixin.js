@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken'
 import { mapActions } from 'vuex'
+import socket from "../socket";
 const myMixin = {
   data() {
     return {
@@ -24,11 +24,18 @@ const myMixin = {
               email: this.customer.email,
               password:  this.customer.password
           }
-          const result = await this.$http.post('/user/login', params)
-          const { token } = result.data
+          const result = await this.$http.post('/auth/login', params)
+          const { token } = result.data.token
           localStorage.setItem('token', token)
-          const decodedToken = jwt.decode(token)
-          this.updateUser(decodedToken)
+          const sessionId = localStorage.getItem('sessionId')
+          if (sessionId) {
+            socket.auth = { sessionId, token }
+            socket.connect()
+          }
+          socket.auth = { token }
+          socket.connect()  
+
+          // this.updateUser(decodedToken)
           if (origin == 'LoginView') {
             this.$router.push('/')
           } else if (origin == 'OrderView') {

@@ -33,7 +33,7 @@ const routes = [
     component: () => import('../views/CartView.vue')
   },
   {
-    path: '/reset-password/:id',
+    path: '/reset-password',
     name: 'reset-password',
     component: () => import('../views/ResetPasswordView.vue')
   },
