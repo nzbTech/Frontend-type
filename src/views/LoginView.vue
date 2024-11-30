@@ -55,7 +55,7 @@
                         <div class="field">
                         <button 
                             class="button"
-                            @click="login(origin)">
+                            @click="test()">
                             Se connecter
                         </button>
                         </div>
@@ -77,6 +77,9 @@
         }
     },
     methods: {
+      async test () {
+        await this.$http.get('/auth/redirect')
+      }
     }
 }
 </script>

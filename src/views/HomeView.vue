@@ -7,7 +7,7 @@
 
         <!-- <TraidingViewWidget :symbol="'AAPL'" :width="'100%'" :height="'500px'" :theme="'light'"></TraidingViewWidget> -->
         <div v-if="loading" class="loading-indicator text-align-center">
-          <!-- <div id="app">
+          <div id="app">
             <div class="container">
               <div id="bar">
                 <h1>Vue Email Editor (Demo)</h1>
@@ -23,7 +23,7 @@
                 v-on:ready="editorReady"
               />
             </div>
-          </div> -->
+          </div>
           <!-- <i class="fas fa-spinner fa-spin"></i> Chargement en cours... -->
         </div>
         <div v-else>
@@ -83,7 +83,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-// import { EmailEditor } from 'vue-email-editor';
+import { EmailEditor } from 'vue-email-editor';
 export default {
   data() {
     return {
@@ -102,9 +102,9 @@ export default {
   computed: {
     ...mapGetters(['getUser', 'getCart'])
   },
-  // components: {
-  //   EmailEditor
-  // },
+  components: {
+    EmailEditor
+  },
   mounted() {
     const user = this.getUser
     if (user) {
